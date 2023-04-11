@@ -69,5 +69,10 @@ struct next_hop_t {
 	int inteface;
 };
 
+struct waiting_packet_t {
+	char *packet;
+  int packet_len;
+	struct next_hop_t *next_hop;
+};
 
 #endif /* _PROTOCOLS_H_ */

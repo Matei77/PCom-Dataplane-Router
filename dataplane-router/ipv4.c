@@ -3,6 +3,8 @@
 #include "protocols.h"
 #include "icmp.h"
 #include "lpm.h"
+#include "queue.h"
+#include "arp.h"
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -19,7 +21,7 @@ void get_interface_ip_uint32(int interface, uint32_t *ip) {
 
 
 
-void process_ip_packet(char *packet, size_t len, int interface, struct route_table_entry *route_table, struct trie_node_t *rt_trie_root) {
+void process_ip_packet(char *packet, size_t len, int interface, struct route_table_entry *route_table, struct trie_node_t *rt_trie_root, hashtable_t *arp_cache, linked_list_t *arp_waiting_queue) {
 	// get the IPv4 header
 	struct iphdr *ip_hdr = (struct iphdr *)(packet + sizeof(struct ether_header));
 
@@ -76,79 +78,35 @@ void process_ip_packet(char *packet, size_t len, int interface, struct route_tab
 	
 	// rewrite l2 addresses
 	struct ether_header *eth_hdr = (struct ether_header *)packet;
+
+	// update sender mac address
 	uint8_t mac[6];
 	get_interface_mac(interface, mac);
 	for (int i = 0; i < 6; i++) {
 		eth_hdr->ether_shost[i] = mac[i];
 	}
-	if (htonl(next_hop->ip) == 3232235522) {
-		eth_hdr->ether_dhost[5] = 0x00;
-		eth_hdr->ether_dhost[4] = 0x00;
-		eth_hdr->ether_dhost[3] = 0xef;
-		eth_hdr->ether_dhost[2] = 0xbe;
-		eth_hdr->ether_dhost[1] = 0xad;
-		eth_hdr->ether_dhost[0] = 0xde;
-	}
-
-	if (htonl(next_hop->ip) == 3232235778) {
-		eth_hdr->ether_dhost[5] = 0x01;
-		eth_hdr->ether_dhost[4] = 0x00;
-		eth_hdr->ether_dhost[3] = 0xef;
-		eth_hdr->ether_dhost[2] = 0xbe;
-		eth_hdr->ether_dhost[1] = 0xad;
-		eth_hdr->ether_dhost[0] = 0xde;
-	}
-
-	if (htonl(next_hop->ip) == 3232236034) {
-		eth_hdr->ether_dhost[5] = 0x02;
-		eth_hdr->ether_dhost[4] = 0x00;
-		eth_hdr->ether_dhost[3] = 0xef;
-		eth_hdr->ether_dhost[2] = 0xbe;
-		eth_hdr->ether_dhost[1] = 0xad;
-		eth_hdr->ether_dhost[0] = 0xde;
-	}
-
-	if (htonl(next_hop->ip) == 3232236290) {
-		eth_hdr->ether_dhost[5] = 0x03;
-		eth_hdr->ether_dhost[4] = 0x00;
-		eth_hdr->ether_dhost[3] = 0xef;
-		eth_hdr->ether_dhost[2] = 0xbe;
-		eth_hdr->ether_dhost[1] = 0xad;
-		eth_hdr->ether_dhost[0] = 0xde;
-	}
-
-	if (htonl(next_hop->ip) == 3221225729) {
-		eth_hdr->ether_dhost[5] = 0x01;
-		eth_hdr->ether_dhost[4] = 0x00;
-		eth_hdr->ether_dhost[3] = 0xbe;
-		eth_hdr->ether_dhost[2] = 0xba;
-		eth_hdr->ether_dhost[1] = 0xfe;
-		eth_hdr->ether_dhost[0] = 0xca;
-	}
-
-	if (htonl(next_hop->ip) == 3221225730) {
-		eth_hdr->ether_dhost[5] = 0x00;
-		eth_hdr->ether_dhost[4] = 0x01;
-		eth_hdr->ether_dhost[3] = 0xbe;
-		eth_hdr->ether_dhost[2] = 0xba;
-		eth_hdr->ether_dhost[1] = 0xfe;
-		eth_hdr->ether_dhost[0] = 0xca;
-	}
-
 	
-		printf("\tnew ehter->shost: ");
-		for (int i = 0; i < 5; i++)
-			printf("%X.", eth_hdr->ether_shost[i]);
-		printf("%X\n", eth_hdr->ether_shost[5]);
+	// update receiver mac address
+	uint8_t mac_next_hop[6];
 
-		printf("\tnew ehter->dhost: ");
-		for (int i = 0; i < 5; i++)
-			printf("%X.", eth_hdr->ether_dhost[i]);
-		printf("%X\n", eth_hdr->ether_dhost[5]);
+	if (get_next_hop_mac(arp_cache, arp_waiting_queue, next_hop, mac_next_hop, packet, len, router_ip_addr) == 0)
+		return;
+	
+	for (int i = 0; i < 6; i++) {
+		eth_hdr->ether_dhost[i] = mac_next_hop[i];
+	}
 
-	printf("strlen: %ld\n", strlen(packet));
-	printf("sizeof: %ld\n", sizeof(packet));
-	printf("len :%ld\n", len);
+	printf("\tipv4 new ehter->shost: ");
+	for (int i = 0; i < 5; i++)
+		printf("%X.", eth_hdr->ether_shost[i]);
+	printf("%X\n", eth_hdr->ether_shost[5]);
+
+	printf("\tipv4 new ehter->dhost: ");
+	for (int i = 0; i < 5; i++)
+		printf("%X.", eth_hdr->ether_dhost[i]);
+	printf("%X\n", eth_hdr->ether_dhost[5]);
+
+
 	// send the packet to the next hop
 	send_to_link(next_hop->inteface, packet, len);
 }

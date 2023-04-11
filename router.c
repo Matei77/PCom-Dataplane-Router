@@ -4,6 +4,10 @@
 #include "dataplane-router/ipv4.h"
 #include "dataplane-router/lpm.h"
 #include "dataplane-router/ether.h"
+#include "dataplane-router/utils/hashtable.h"
+#include "dataplane-router/utils/types.h"
+#include "dataplane-router/arp.h"
+#include "dataplane-router/utils/linkedlist.h"
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -23,6 +27,12 @@ int main(int argc, char *argv[])
 	rt_size = read_rtable(argv[1], route_table);
 
 	struct trie_node_t *rt_trie_root = populate_trie(route_table, rt_size);
+
+	hashtable_t *arp_cache = ht_create(INITIAL_BUCKETS_NR, hash_function_string, compare_function_strings);
+
+	linked_list_t *arp_waiting_queue = ll_create(sizeof(struct waiting_packet_t));
+	printf("arp_waiting_queue pointer: %lu\n", arp_waiting_queue);
+
 
 	while (1) {
 
@@ -55,11 +65,11 @@ int main(int argc, char *argv[])
 			}
 
 		if (ntohs(eth_hdr->ether_type) == ETHERTYPE_IP) {
-			process_ip_packet(packet, len, interface, route_table, rt_trie_root);
+			process_ip_packet(packet, len, interface, route_table, rt_trie_root, arp_cache, arp_waiting_queue);
 		}
 
 		if (ntohs(eth_hdr->ether_type) == ETHERTYPE_ARP) {
-			//process_arp_packet(arp_hdr);
+			process_arp_packet(packet, len, interface, arp_cache, arp_waiting_queue);
 		}
 	}
 }
