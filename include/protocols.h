@@ -1,5 +1,11 @@
+#ifndef _PROTOCOLS_H_
+#define _PROTOCOLS_H_
+
 #include <unistd.h>
 #include <stdint.h>
+
+#define ETHERTYPE_IP 0x0800
+#define ETHERTYPE_ARP 0x0806
 
 /* Ethernet ARP packet from RFC 826 */
 struct arp_header {
@@ -57,3 +63,11 @@ struct icmphdr
     } frag;                        /* path mtu discovery */
   } un;
 };
+
+struct next_hop_t {
+	uint32_t ip;
+	int inteface;
+};
+
+
+#endif /* _PROTOCOLS_H_ */
