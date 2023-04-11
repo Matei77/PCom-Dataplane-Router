@@ -18,6 +18,7 @@ void get_interface_ip_uint32(int interface, uint32_t *ip) {
 }
 
 
+
 void process_ip_packet(char *packet, size_t len, int interface, struct route_table_entry *route_table, struct trie_node_t *rt_trie_root) {
 	// get the IPv4 header
 	struct iphdr *ip_hdr = (struct iphdr *)(packet + sizeof(struct ether_header));
