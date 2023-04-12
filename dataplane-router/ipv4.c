@@ -24,8 +24,8 @@ void process_ip_packet(char *packet, size_t len, int interface, struct route_tab
 	printf("\t\trouter_ip_addr: %u\n", router_ip_addr);
 	printf("\t\trouter_ip_addr_string: %s\n", get_interface_ip(interface));
 
-	if (ip_hdr->daddr == router_ip_addr) {
-		respond_to_icmp();
+	if (ip_hdr->daddr == htonl(router_ip_addr)) {
+		respond_to_icmp(packet, len, interface);
 		return;
 	}
 
@@ -43,10 +43,10 @@ void process_ip_packet(char *packet, size_t len, int interface, struct route_tab
 	}
 	
 	// check if the TTL was exceeded
-	if (ntohs(ip_hdr->ttl) > 1) {
+	if (ip_hdr->ttl > 1) {
 		--(ip_hdr->ttl);
 	} else {
-		send_time_exceeded_icmp();
+		send_time_exceeded_icmp(packet, len, interface);
 		printf("ttl bad\n");
 		return;
 	}
@@ -55,7 +55,7 @@ void process_ip_packet(char *packet, size_t len, int interface, struct route_tab
 	struct next_hop_t *next_hop = find_next_hop(ntohl(ip_hdr->daddr), rt_trie_root);
 
 	if (!next_hop) {
-		send_dest_unreachable_icmp();
+		send_dest_unreachable_icmp(packet, len, interface);
 		printf("next_hop = NULL\n");
 		return;
 	}
