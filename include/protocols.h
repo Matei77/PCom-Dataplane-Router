@@ -66,7 +66,7 @@ struct icmphdr
 
 struct next_hop_t {
 	uint32_t ip;
-	int inteface;
+	int interface;
 };
 
 struct waiting_packet_t {

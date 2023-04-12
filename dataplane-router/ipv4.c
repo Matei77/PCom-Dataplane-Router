@@ -11,15 +11,6 @@
 #include <arpa/inet.h>
 #include <string.h>
 
-void get_interface_ip_uint32(int interface, uint32_t *ip) {
-	char *char_router_ip_addr;
-	char_router_ip_addr = get_interface_ip(interface);
-
-	inet_pton(AF_INET, char_router_ip_addr, ip);
-	*ip = htonl(*ip);
-}
-
-
 
 void process_ip_packet(char *packet, size_t len, int interface, struct route_table_entry *route_table, struct trie_node_t *rt_trie_root, hashtable_t *arp_cache, linked_list_t *arp_waiting_queue) {
 	// get the IPv4 header
@@ -68,7 +59,7 @@ void process_ip_packet(char *packet, size_t len, int interface, struct route_tab
 		printf("next_hop = NULL\n");
 		return;
 	}
-	printf("next_hop->interface: %d\n next_hop->ip: %u\n", next_hop->inteface, next_hop->ip);
+	printf("next_hop->interface: %d\n next_hop->ip: %u\n", next_hop->interface, next_hop->ip);
 	printf("htonl(next_hop->ip): %u\n", htonl(next_hop->ip));
 	printf("ntohl(next_hop->ip): %u\n", ntohl(next_hop->ip));
 	
@@ -78,10 +69,9 @@ void process_ip_packet(char *packet, size_t len, int interface, struct route_tab
 	
 	// rewrite l2 addresses
 	struct ether_header *eth_hdr = (struct ether_header *)packet;
-
 	// update sender mac address
 	uint8_t mac[6];
-	get_interface_mac(interface, mac);
+	get_interface_mac(next_hop->interface, mac);
 	for (int i = 0; i < 6; i++) {
 		eth_hdr->ether_shost[i] = mac[i];
 	}
@@ -106,7 +96,67 @@ void process_ip_packet(char *packet, size_t len, int interface, struct route_tab
 		printf("%X.", eth_hdr->ether_dhost[i]);
 	printf("%X\n", eth_hdr->ether_dhost[5]);
 
+	// struct ether_header *eth_hdr = (struct ether_header *)packet;
+	// uint8_t mac[6];
+	// get_interface_mac(interface, mac);
+	// for (int i = 0; i < 6; i++) {
+	// 	eth_hdr->ether_shost[i] = mac[i];
+	// }
+	// if (htonl(next_hop->ip) == 3232235522) {
+	// 	eth_hdr->ether_dhost[5] = 0x00;
+	// 	eth_hdr->ether_dhost[4] = 0x00;
+	// 	eth_hdr->ether_dhost[3] = 0xef;
+	// 	eth_hdr->ether_dhost[2] = 0xbe;
+	// 	eth_hdr->ether_dhost[1] = 0xad;
+	// 	eth_hdr->ether_dhost[0] = 0xde;
+	// }
+
+	// if (htonl(next_hop->ip) == 3232235778) {
+	// 	eth_hdr->ether_dhost[5] = 0x01;
+	// 	eth_hdr->ether_dhost[4] = 0x00;
+	// 	eth_hdr->ether_dhost[3] = 0xef;
+	// 	eth_hdr->ether_dhost[2] = 0xbe;
+	// 	eth_hdr->ether_dhost[1] = 0xad;
+	// 	eth_hdr->ether_dhost[0] = 0xde;
+	// }
+
+	// if (htonl(next_hop->ip) == 3232236034) {
+	// 	eth_hdr->ether_dhost[5] = 0x02;
+	// 	eth_hdr->ether_dhost[4] = 0x00;
+	// 	eth_hdr->ether_dhost[3] = 0xef;
+	// 	eth_hdr->ether_dhost[2] = 0xbe;
+	// 	eth_hdr->ether_dhost[1] = 0xad;
+	// 	eth_hdr->ether_dhost[0] = 0xde;
+	// }
+
+	// if (htonl(next_hop->ip) == 3232236290) {
+	// 	eth_hdr->ether_dhost[5] = 0x03;
+	// 	eth_hdr->ether_dhost[4] = 0x00;
+	// 	eth_hdr->ether_dhost[3] = 0xef;
+	// 	eth_hdr->ether_dhost[2] = 0xbe;
+	// 	eth_hdr->ether_dhost[1] = 0xad;
+	// 	eth_hdr->ether_dhost[0] = 0xde;
+	// }
+
+	// if (htonl(next_hop->ip) == 3221225729) {
+	// 	eth_hdr->ether_dhost[5] = 0x01;
+	// 	eth_hdr->ether_dhost[4] = 0x00;
+	// 	eth_hdr->ether_dhost[3] = 0xbe;
+	// 	eth_hdr->ether_dhost[2] = 0xba;
+	// 	eth_hdr->ether_dhost[1] = 0xfe;
+	// 	eth_hdr->ether_dhost[0] = 0xca;
+	// }
+
+	// if (htonl(next_hop->ip) == 3221225730) {
+	// 	eth_hdr->ether_dhost[5] = 0x00;
+	// 	eth_hdr->ether_dhost[4] = 0x01;
+	// 	eth_hdr->ether_dhost[3] = 0xbe;
+	// 	eth_hdr->ether_dhost[2] = 0xba;
+	// 	eth_hdr->ether_dhost[1] = 0xfe;
+	// 	eth_hdr->ether_dhost[0] = 0xca;
+	// }
+
 
 	// send the packet to the next hop
-	send_to_link(next_hop->inteface, packet, len);
+	send_to_link(next_hop->interface, packet, len);
 }

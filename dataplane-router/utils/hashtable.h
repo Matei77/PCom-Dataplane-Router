@@ -4,7 +4,7 @@
 
 #include "types.h"
 
-int compare_function_ints(void *a, void *b);
+int compare_function_uint32(void *a, void *b);
 
 int compare_function_strings(void *a, void *b);
 

@@ -38,6 +38,9 @@ struct arp_entry {
 
 char *get_interface_ip(int interface);
 
+/* get the interface ip in uint32 */
+void get_interface_ip_uint32(int interface, uint32_t *ip);
+
 /**
  * @brief Get the interface mac object. The function writes
  * the MAC at the pointer mac. uint8_t *mac should be allocated.

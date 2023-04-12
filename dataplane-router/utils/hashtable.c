@@ -11,14 +11,14 @@
 #define MAX_LOAD_FACTOR 1
 
 // Key comaparison function for integers
-int compare_function_ints(void *a, void *b)
+int compare_function_uint32(void *a, void *b)
 {
-	int int_a = *((int *)a);
-	int int_b = *((int *)b);
+	uint32_t uint32_a = *((uint32_t *)a);
+	uint32_t uint32_b = *((uint32_t *)b);
 
-	if (int_a == int_b) {
+	if (uint32_a == uint32_b) {
 		return 0;
-	} else if (int_a < int_b) {
+	} else if (uint32_a < uint32_b) {
 		return -1;
 	} else {
 		return 1;

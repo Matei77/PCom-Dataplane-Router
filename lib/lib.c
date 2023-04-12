@@ -112,6 +112,14 @@ char *get_interface_ip(int interface)
 	return inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr);
 }
 
+void get_interface_ip_uint32(int interface, uint32_t *ip) {
+	char *char_router_ip_addr;
+	char_router_ip_addr = get_interface_ip(interface);
+
+	inet_pton(AF_INET, char_router_ip_addr, ip);
+	*ip = htonl(*ip);
+}
+
 void get_interface_mac(int interface, uint8_t *mac)
 {
 	struct ifreq ifr;

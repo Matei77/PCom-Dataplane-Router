@@ -59,7 +59,7 @@ void insert(struct trie_node_t *root, struct route_table_entry rtb) {
 	iter->is_end = ++nr;
 	iter->next_hop = malloc(sizeof(struct next_hop_t));
 	DIE(!iter->next_hop, "iter->next_hop malloc");
-	iter->next_hop->inteface = rtb.interface;
+	iter->next_hop->interface = rtb.interface;
 	iter->next_hop->ip = rtb.next_hop;
 }
 

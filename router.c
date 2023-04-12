@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 
 	struct trie_node_t *rt_trie_root = populate_trie(route_table, rt_size);
 
-	hashtable_t *arp_cache = ht_create(INITIAL_BUCKETS_NR, hash_function_string, compare_function_strings);
+	hashtable_t *arp_cache = ht_create(INITIAL_BUCKETS_NR, hash_function_int, compare_function_uint32);
 
 	linked_list_t *arp_waiting_queue = ll_create(sizeof(struct waiting_packet_t));
 	printf("arp_waiting_queue pointer: %lu\n", arp_waiting_queue);
