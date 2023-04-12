@@ -1,10 +1,12 @@
 PROJECT=router
-SOURCES=router.c lib/queue.c lib/list.c lib/lib.c dataplane-router/ipv4.c dataplane-router/ether.c dataplane-router/icmp.c dataplane-router/lpm.c dataplane-router/utils/hashtable.c dataplane-router/utils/linkedlist.c dataplane-router/arp.c
+SOURCES=dataplane-router/router.c lib/lib.c dataplane-router/ipv4.c dataplane-router/arp.c\
+		dataplane-router/ether.c dataplane-router/icmp.c dataplane-router/lpm.c\
+		lib/hashtable.c lib/linkedlist.c
 LIBRARY=nope
 INCPATHS=include
 LIBPATHS=.
 LDFLAGS=
-CFLAGS=-c -g -Wall -Wno-error=unused-variable
+CFLAGS=-c -Wall -Werror -Wno-error=unused-variable
 CC=gcc
 
 # Automatic generation of some important lists

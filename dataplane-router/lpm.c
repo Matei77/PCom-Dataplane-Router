@@ -73,7 +73,7 @@ struct trie_node_t *populate_trie(struct route_table_entry routing_table[],
 
 	return root;
 }
-/* find the longest prefix maching hop with the dest_ip */
+/* find the longest prefix maching the dest_ip */
 struct next_hop_t *find_next_hop(uint32_t dest_ip, struct trie_node_t *root)
 {
 	struct next_hop_t *next_hop = NULL;
