@@ -1,9 +1,9 @@
 #ifndef _ICMP_H_
 #define _ICMP_H_
 
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
 
 void respond_to_icmp(char *packet, size_t len, int interface);
 

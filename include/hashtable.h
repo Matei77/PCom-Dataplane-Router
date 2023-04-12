@@ -48,4 +48,4 @@ unsigned int ht_get_hmax(hashtable_t *ht);
  hashtable if this is the case */
 void ht_check_and_resize(hashtable_t *ht);
 
-#endif  /* _HASHTABLE_H_ */
+#endif /* _HASHTABLE_H_ */

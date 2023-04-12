@@ -1,10 +1,10 @@
 #ifndef _LIB_H_
 #define _LIB_H_
 
-#include <unistd.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #define MAX_PACKET_LEN 1600
 #define ROUTER_NUM_INTERFACES 3
@@ -16,7 +16,7 @@ int send_to_link(int interface, char *frame_data, size_t length);
  * be received.
  *
  * @param frame_data - region of memory in which the data will be copied; should
- *        have at least MAX_PACKET_LEN bytes allocated 
+ *        have at least MAX_PACKET_LEN bytes allocated
  * @param length - will be set to the total number of bytes received.
  * Returns: the interface it has been received from.
  */
@@ -32,8 +32,8 @@ struct route_table_entry {
 
 /* ARP table entry when skipping the ARP exercise */
 struct arp_entry {
-    uint32_t ip;
-    uint8_t mac[6];
+	uint32_t ip;
+	uint8_t mac[6];
 };
 
 char *get_interface_ip(int interface);
@@ -91,13 +91,14 @@ int parse_arp_table(char *path, struct arp_entry *arp_table);
 
 void init(int argc, char *argv[]);
 
-#define DIE(condition, message, ...) \
-	do { \
-		if ((condition)) { \
-			fprintf(stderr, "[(%s:%d)]: " # message "\n", __FILE__, __LINE__, ##__VA_ARGS__); \
-			perror(""); \
-			exit(1); \
-		} \
+#define DIE(condition, message, ...)                                           \
+	do {                                                                       \
+		if ((condition)) {                                                     \
+			fprintf(stderr, "[(%s:%d)]: " #message "\n", __FILE__, __LINE__,   \
+					##__VA_ARGS__);                                            \
+			perror("");                                                        \
+			exit(1);                                                           \
+		}                                                                      \
 	} while (0)
 
 #endif /* _LIB_H_ */

@@ -66,11 +66,13 @@ struct icmphdr
   } un;
 };
 
+/* holds ip address and interface of the next hop */
 struct next_hop_t {
 	uint32_t ip;
 	int interface;
 };
 
+/* holds data of a wating packet */
 struct waiting_packet_t {
 	char *packet;
   int packet_len;

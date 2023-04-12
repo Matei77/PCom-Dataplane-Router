@@ -19,4 +19,4 @@ unsigned int ll_get_size(linked_list_t *list);
 /* This function frees a linked list */
 void ll_free(linked_list_t **pp_list);
 
-#endif  /* LINKEDLIST_H_ */
+#endif /* LINKEDLIST_H_ */

@@ -24,7 +24,7 @@ struct info {
 typedef struct hashtable_t hashtable_t;
 struct hashtable_t {
 	linked_list_t **buckets;
-	unsigned int size;  /*total number of elements */
+	unsigned int size;  /* total number of elements */
 	unsigned int hmax;  /* number of buckets */
 	unsigned int (*hash_function)(void *);
 	int (*compare_function)(void *, void *);
