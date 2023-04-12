@@ -1,9 +1,10 @@
+/* Copyright Ionescu Matei-Stefan - 323CAb - 2022-2023 */
 #include "arp.h"
 #include "lib.h"
 #include "protocols.h"
-#include "utils/types.h"
-#include "utils/hashtable.h"
-#include "utils/linkedlist.h"
+#include "types.h"
+#include "hashtable.h"
+#include "linkedlist.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -15,7 +16,6 @@
 
 int get_next_hop_mac(hashtable_t *arp_cache, linked_list_t *arp_waiting_queue, struct next_hop_t *next_hop, uint8_t *mac_next_hop, char *packet, int packet_len, uint32_t router_ip_addr) {
 
-	printf("check if packet is in cache:");
 	// check if packet is in cache
 	if (ht_has_key(arp_cache, &next_hop->ip)) {
 		// set the mac_next_hop
@@ -40,7 +40,6 @@ int get_next_hop_mac(hashtable_t *arp_cache, linked_list_t *arp_waiting_queue, s
 		waiting_pack->next_hop = next_hop;
 
 		printf("before ll_add_nth_node\n");
-		printf("arp_waiting_queue pointer: %lu\n", arp_waiting_queue);
 		ll_add_nth_node(arp_waiting_queue, 0, waiting_pack);
 		printf("added packet to wating packets queue\n");
 

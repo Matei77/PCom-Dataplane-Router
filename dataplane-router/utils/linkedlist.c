@@ -1,5 +1,4 @@
-// Copyright Ionescu Matei-Stefan - 313CAb - 2021-2022
-#include <stdio.h>
+/* Copyright Ionescu Matei-Stefan - 323CAb - 2022-2023 */
 #include <stdlib.h>
 #include <string.h>
 
@@ -7,7 +6,7 @@
 #include "types.h"
 #include "lib.h"
 
-// This function creates a new linked list and returns it
+/* This function creates a new linked list and returns it */
 linked_list_t *ll_create(unsigned int data_size)
 {
 	linked_list_t *ll;
@@ -22,7 +21,7 @@ linked_list_t *ll_create(unsigned int data_size)
 	return ll;
 }
 
-// This function adds a new node to a linked list at position n
+/* This function adds a new node to a linked list at position n */
 void ll_add_nth_node(linked_list_t *list, unsigned int n, const void *new_data)
 {
 	ll_node_t *prev = NULL, *curr = NULL;
@@ -59,7 +58,7 @@ void ll_add_nth_node(linked_list_t *list, unsigned int n, const void *new_data)
 	list->size++;
 }
 
-// this function removes the nth node from a linked list
+/* this function removes the nth node from a linked list */
 ll_node_t *ll_remove_nth_node(linked_list_t *list, unsigned int n)
 {
 	ll_node_t *prev, *curr;
@@ -91,7 +90,7 @@ ll_node_t *ll_remove_nth_node(linked_list_t *list, unsigned int n)
 	return curr;
 }
 
-// This function return the size of a list
+/* This function return the size of a list */
 unsigned int ll_get_size(linked_list_t *list)
 {
 	if (!list) {
@@ -101,7 +100,7 @@ unsigned int ll_get_size(linked_list_t *list)
 	return list->size;
 }
 
-// This function frees a linked list
+/* This function frees a linked list */
 void ll_free(linked_list_t **pp_list)
 {
 	ll_node_t *currNode;

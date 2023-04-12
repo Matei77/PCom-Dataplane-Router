@@ -1,7 +1,7 @@
 #ifndef _LPM_H_
 #define _LPM_H_
 
-#include "lib.h"
+#include "../include/lib.h"
 
 #define CHILDREN_NR 2
 // Trie node 

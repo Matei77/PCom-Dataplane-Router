@@ -70,8 +70,7 @@ void respond_to_icmp(char *packet, size_t len, int interface) {
 
 	int response_packet_len = sizeof(struct ether_header) + sizeof(struct iphdr) + sizeof(struct icmphdr) + pack_data_len;
 
-	int rc = 0;
-	rc = send_to_link(interface, response_packet, response_packet_len);
+	send_to_link(interface, response_packet, response_packet_len);
 }
 
 void send_dest_unreachable_icmp(char *packet, size_t len, int interface) {
@@ -118,9 +117,7 @@ void send_dest_unreachable_icmp(char *packet, size_t len, int interface) {
 
 	int response_packet_len = sizeof(struct ether_header) + sizeof(struct iphdr) + sizeof(struct icmphdr) + pack_iphdr_and_data_len;
 
-	int rc = 0;
-	rc = send_to_link(interface, response_packet, response_packet_len);
-	printf("````````````sent ttl icmp rc: %d``````````````\n", rc);
+	send_to_link(interface, response_packet, response_packet_len);
 }
 
 void send_time_exceeded_icmp(char *packet, size_t len, int interface) {
@@ -167,7 +164,5 @@ void send_time_exceeded_icmp(char *packet, size_t len, int interface) {
 
 	int response_packet_len = sizeof(struct ether_header) + sizeof(struct iphdr) + sizeof(struct icmphdr) + pack_iphdr_and_data_len;
 
-	int rc = 0;
-	rc = send_to_link(interface, response_packet, response_packet_len);
-	printf("````````````sent ttl icmp rc: %d``````````````\n", rc);
+	send_to_link(interface, response_packet, response_packet_len);
 }

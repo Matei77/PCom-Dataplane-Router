@@ -1,4 +1,4 @@
-// Copyright Ionescu Matei-Stefan - 313CAb - 2021-2022
+/* Copyright Ionescu Matei-Stefan - 323CAb - 2022-2023 */
 #ifndef TYPES_H_
 #define TYPES_H_
 
@@ -24,10 +24,10 @@ struct info {
 typedef struct hashtable_t hashtable_t;
 struct hashtable_t {
 	linked_list_t **buckets;
-	unsigned int size;  // total number of elements
-	unsigned int hmax;  // number of buckets
+	unsigned int size;  /*total number of elements */
+	unsigned int hmax;  /* number of buckets */
 	unsigned int (*hash_function)(void *);
 	int (*compare_function)(void *, void *);
 };
 
-#endif  // TYPES_H_
+#endif  /* TYPES_H_ */

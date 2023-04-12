@@ -1,5 +1,4 @@
-// Copyright Ionescu Matei-Stefan - 313CAb - 2021-2022
-#include <stdio.h>
+/* Copyright Ionescu Matei-Stefan - 323CAb - 2022-2023 */
 #include <stdlib.h>
 #include <string.h>
 
@@ -8,9 +7,7 @@
 #include "linkedlist.h"
 #include "lib.h"
 
-#define MAX_LOAD_FACTOR 1
-
-// Key comaparison function for integers
+/* Key comaparison function for uint32_t integers */
 int compare_function_uint32(void *a, void *b)
 {
 	uint32_t uint32_a = *((uint32_t *)a);
@@ -25,7 +22,7 @@ int compare_function_uint32(void *a, void *b)
 	}
 }
 
-// Key comaparison function for strings
+/* Key comaparison function for strings */
 int compare_function_strings(void *a, void *b)
 {
 	char *str_a = (char *)a;
@@ -34,10 +31,10 @@ int compare_function_strings(void *a, void *b)
 	return strcmp(str_a, str_b);
 }
 
-// Hash function for integers
+/* Hash function for integers */
 unsigned int hash_function_int(void *a)
 {
-	// Credits: https://stackoverflow.com/a/12996028/7883884
+	/* Credits: https://stackoverflow.com/a/12996028/7883884 */
 
 	unsigned int uint_a = *((unsigned int *)a);
 
@@ -47,10 +44,10 @@ unsigned int hash_function_int(void *a)
 	return uint_a;
 }
 
-// Hash function for strings
+/* Hash function for strings */
 unsigned int hash_function_string(void *a)
 {
-	// Credits: http://www.cse.yorku.ca/~oz/hash.html
+	/* Credits: http://www.cse.yorku.ca/~oz/hash.html */
 
 	unsigned char *puchar_a = (unsigned char *)a;
 	unsigned int hash = 5381;
@@ -62,7 +59,7 @@ unsigned int hash_function_string(void *a)
 	return hash;
 }
 
-// This function creates a new hashtable
+/* This function creates a new hashtable */
 hashtable_t *ht_create(unsigned int hmax, unsigned int (*hash_function)(void *),
 					   int (*compare_function)(void *, void *))
 {
@@ -84,7 +81,7 @@ hashtable_t *ht_create(unsigned int hmax, unsigned int (*hash_function)(void *),
 	return hashtable;
 }
 
-// This function checks if the key is already in the hashtable
+/* This function checks if the key is already in the hashtable */
 int ht_has_key(hashtable_t *ht, void *key)
 {
 	unsigned int index = ht->hash_function(key) % ht->hmax;
@@ -100,7 +97,7 @@ int ht_has_key(hashtable_t *ht, void *key)
 	return 0;
 }
 
-// This function returns the value associated with a key
+/* This function returns the value associated with a key */
 void *ht_get(hashtable_t *ht, void *key)
 {
 	unsigned int index = ht->hash_function(key) % ht->hmax;
@@ -116,7 +113,7 @@ void *ht_get(hashtable_t *ht, void *key)
 	return NULL;
 }
 
-// This function adds a new pair of key - value in the hashtable
+/* This function adds a new pair of key - value in the hashtable */
 void ht_put(hashtable_t *ht, void *key, unsigned int key_size, void *value,
 			unsigned int value_size)
 {
@@ -148,7 +145,7 @@ void ht_put(hashtable_t *ht, void *key, unsigned int key_size, void *value,
 	ht->size++;
 }
 
-// This function removes the entry with the given key from the hashtable
+/* This function removes the entry with the given key from the hashtable */
 void ht_remove_entry(hashtable_t *ht, void *key)
 {
 	if (ht_has_key(ht, key) == 0)
@@ -177,7 +174,7 @@ void ht_remove_entry(hashtable_t *ht, void *key)
 	}
 }
 
-// This function frees the memory allocated for a hashtable
+/* This function frees the memory allocated for a hashtable */
 void ht_free(hashtable_t *ht)
 {
 	for (unsigned int i = 0; i < ht->hmax; i++) {
@@ -193,7 +190,7 @@ void ht_free(hashtable_t *ht)
 	free(ht);
 }
 
-// This function returns the number of elements in the hashtable
+/* This function returns the number of elements in the hashtable */
 unsigned int ht_get_size(hashtable_t *ht)
 {
 	if (ht == NULL)
@@ -202,7 +199,7 @@ unsigned int ht_get_size(hashtable_t *ht)
 	return ht->size;
 }
 
-// This function returns the number of buckets in the hashtable
+/* This function returns the number of buckets in the hashtable */
 unsigned int ht_get_hmax(hashtable_t *ht)
 {
 	if (ht == NULL)
@@ -211,8 +208,8 @@ unsigned int ht_get_hmax(hashtable_t *ht)
 	return ht->hmax;
 }
 
-// This function checks if the MAX_LOAD_FACTOR has been reached and resizes the
-// hashtable if this is the case
+/* This function checks if the MAX_LOAD_FACTOR has been reached and resizes the
+ hashtable if this is the case */
 void ht_check_and_resize(hashtable_t *ht)
 {
 	float load_factor = (float)ht->size / (float)ht->hmax;

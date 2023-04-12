@@ -1,5 +1,5 @@
-#ifndef _SKEL_H_
-#define _SKEL_H_
+#ifndef _LIB_H_
+#define _LIB_H_
 
 #include <unistd.h>
 #include <stdint.h>
@@ -100,4 +100,4 @@ void init(int argc, char *argv[]);
 		} \
 	} while (0)
 
-#endif /* _SKEL_H_ */
+#endif /* _LIB_H_ */

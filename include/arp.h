@@ -1,8 +1,8 @@
+/* Copyright Ionescu Matei-Stefan - 323CAb - 2022-2023 */
 #ifndef _ARP_H_
 #define _ARP_H_
 
-#include "utils/hashtable.h"
-#include "utils/linkedlist.h"
+#include "types.h"
 #include "protocols.h"
 
 int get_next_hop_mac(hashtable_t *arp_cache, linked_list_t *arp_waiting_queue, struct next_hop_t *next_hop, uint8_t *mac_next_hop, char *packet, int packet_len, uint32_t router_ip_addr);
